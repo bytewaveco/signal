@@ -110,7 +110,7 @@ export function Signal(
     signalPeriod: options.macdSignalPeriod,
     SimpleMAOscillator: false,
     SimpleMASignal: false,
-  }).map((macd, index) => ({ ...macd, index })) as SignalMACDOutput[]
+  }) as SignalMACDOutput[]
   let williamsRs = WilliamsR.calculate({
     high: candles.map((candle) => candle.high),
     low: candles.map((candle) => candle.low),
@@ -129,7 +129,7 @@ export function Signal(
 
   candles = sliceToLength(candles, minLength)
   emas = sliceToLength(emas, minLength)
-  macds = sliceToLength(macds, minLength)
+  macds = sliceToLength(macds, minLength).map((macd, index) => ({ ...macd, index }))
   williamsRs = sliceToLength(williamsRs, minLength)
 
   const emaBuys = emas.map((ema) => ema - ema * options.emaBuyRatio)
