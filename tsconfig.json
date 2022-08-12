@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/lib",
+    "declaration": true,
+    "target": "ES2015",
+    "module": "commonjs"
+  },
+  "include": ["src/**/*.ts", "__test__/**/*.ts"]
+}
