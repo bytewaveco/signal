@@ -16,7 +16,7 @@ export default defineConfig({
       const packageDeployable = {}
 
       for (const [key, value] of Object.entries(pkg)) {
-        if (!['devDependencies', 'scripts'].includes(key)) {
+        if (!['dependencies', 'devDependencies', 'scripts'].includes(key)) {
           packageDeployable[key] = value
         }
       }
