@@ -1,11 +1,28 @@
 {
-  "name": "@bytewave/signal",
+  "name": "@bytewaveco/signal",
   "version": "1.0.0",
   "description": "An adjustable combination of technical indicators to be used for financial analysis.",
+  "keywords": [
+    "signal",
+    "finance",
+    "technicalindicators",
+    "technical",
+    "indicators",
+    "candle",
+    "candlestick",
+    "bytewave",
+    "bytewaveco"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bytewaveco/signal.git"
   },
+  "homepage": "https://github.com/bytewaveco/signal.git",
+  "bugs": {
+    "url": "https://github.com/bytewaveco/signal/issues",
+    "email": "kaden.griffith@bytewave.co"
+  },
+  "private": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -13,16 +30,10 @@
     "lint": "eslint src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
     "format": "prettier --write src/**/*.ts",
-    "test": "vitest dev"
+    "test": "vitest dev",
+    "publish": "cd dist && npm publish --access public"
   },
-  "keywords": [
-    "finance",
-    "technicalindicators",
-    "technical",
-    "indicators",
-    "bytewave"
-  ],
-  "author": "Kaden Griffith <kaden.griffith@bytewave.co>",
+  "author": "Kaden Griffith <kaden.griffith@bytewave.co> (bytewave.co)",
   "license": "MIT",
   "dependencies": {
     "@mathigon/euclid": "^1.1.1",

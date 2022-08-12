@@ -7,7 +7,7 @@ Generating signals provides actual determined output of the indicators, which ca
 ## Installation
 
 ```bash
-npm install @bytwave/signal
+npm install @bytwaveco/signal
 ```
 
 ### Usage
