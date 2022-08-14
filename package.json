@@ -1,6 +1,6 @@
 {
   "name": "@bytewaveco/signal",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An adjustable combination of technical indicators to be used for financial analysis.",
   "keywords": [
     "signal",
