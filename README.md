@@ -1,3 +1,5 @@
+[![Publish Packages](https://github.com/bytewaveco/signal/actions/workflows/npm-publish-packages.yml/badge.svg?branch=main)](https://github.com/bytewaveco/signal/actions/workflows/npm-publish-packages.yml)
+
 # Signal
 
 Signal is a combination of MACD, EMA, and Williams %R. Signal offers a configurable set of financial indicators that can be used to determine whether a stock is overbought or oversold.
