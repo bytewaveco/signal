@@ -32,7 +32,7 @@ describe('Signal', () => {
         .map((signal, index) => ({ ...signal, index }))
         .filter(({ isIntersecting }) => isIntersecting)
 
-      expect(intersections.length).toBe(198)
+      expect(intersections.length).toBe(119)
     })
   })
 })

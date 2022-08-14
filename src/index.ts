@@ -139,16 +139,16 @@ export function Signal(
   macds = sliceToLength(macds, minLength).map((macd, index) => ({ ...macd, index }))
   williamsRs = sliceToLength(williamsRs, minLength)
 
-  for (const [lastIndex, macd] of macds.slice(1, macds.length - 1).entries()) {
+  for (const macd of macds.slice(1)) {
     // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
     // [a, b]
-    const macdStart = [lastIndex, macds[lastIndex].MACD]
+    const macdStart = [macd.index - 1, macds[macd.index - 1].MACD]
     // [c, d]
-    const macdEnd = [lastIndex + 2, macds[lastIndex + 2].MACD]
+    const macdEnd = [macd.index, macds[macd.index].MACD]
     // [p, q]
-    const signalStart = [lastIndex, macds[lastIndex].signal]
+    const signalStart = [macd.index - 1, macds[macd.index - 1].signal]
     // [r, s]
-    const signalEnd = [lastIndex + 2, macds[lastIndex + 2].signal]
+    const signalEnd = [macd.index, macds[macd.index].signal]
     // (c - a) * (s - q) - (r - p) * (d - b);
     const det =
       (macdEnd[0] - macdStart[0]) * (signalEnd[1] - signalStart[1]) -
