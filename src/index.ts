@@ -1,6 +1,8 @@
-import { intersections, Point, Polyline } from '@mathigon/euclid'
 import { EMA, MACD, WilliamsR } from 'technicalindicators'
 
+/**
+ * A generic financial candle. May contain non-controlled values.
+ */
 interface SignalCandles extends Record<string, unknown> {
   open: number
   close: number
@@ -9,6 +11,9 @@ interface SignalCandles extends Record<string, unknown> {
   timestamp: string
 }
 
+/**
+ * Configuration options for Signal.
+ */
 interface SignalOptions {
   openKey: string
   closeKey: string
@@ -24,6 +29,9 @@ interface SignalOptions {
   williamsRPeriod: number
 }
 
+/**
+ * Extended technicalindicators MACD output.
+ */
 interface SignalMACDOutput {
   MACD: number
   signal: number
@@ -32,6 +40,9 @@ interface SignalMACDOutput {
   isIntersecting: boolean
 }
 
+/**
+ * An output signal.
+ */
 interface SignalOutput {
   open: number
   close: number
@@ -49,6 +60,9 @@ interface SignalOutput {
   signal: 'buy' | 'sell' | 'hold'
 }
 
+/**
+ * Default configuration options for Signal.
+ */
 const SignalOptionsDefault: SignalOptions = {
   openKey: 'open',
   closeKey: 'close',
@@ -118,19 +132,45 @@ export function Signal(
     period: options.williamsRPeriod,
   })
 
-  for (const intersectionIndex of intersections(
-    new Polyline(...macds.map(({ signal }, index) => new Point(index, signal))),
-    new Polyline(...macds.map(({ MACD }, index) => new Point(index, MACD)))
-  ).map(({ x }) => Math.floor(x))) {
-    macds[intersectionIndex].isIntersecting = true
-  }
-
   const minLength = Math.min(candles.length, emas.length, macds.length, williamsRs.length)
 
   candles = sliceToLength(candles, minLength)
   emas = sliceToLength(emas, minLength)
   macds = sliceToLength(macds, minLength).map((macd, index) => ({ ...macd, index }))
   williamsRs = sliceToLength(williamsRs, minLength)
+
+  for (const [lastIndex, macd] of macds.slice(1, macds.length - 1).entries()) {
+    // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
+    // [a, b]
+    const macdStart = [lastIndex, macds[lastIndex].MACD]
+    // [c, d]
+    const macdEnd = [lastIndex + 2, macds[lastIndex + 2].MACD]
+    // [p, q]
+    const signalStart = [lastIndex, macds[lastIndex].signal]
+    // [r, s]
+    const signalEnd = [lastIndex + 2, macds[lastIndex + 2].signal]
+    // (c - a) * (s - q) - (r - p) * (d - b);
+    const det =
+      (macdEnd[0] - macdStart[0]) * (signalEnd[1] - signalStart[1]) -
+      (signalEnd[0] - signalStart[0]) * (macdEnd[1] - macdStart[1])
+
+    if (det !== 0) {
+      // ((s - q) * (r - a) + (p - r) * (s - b)) / det
+      const lambda =
+        ((signalEnd[1] - signalStart[1]) * (signalEnd[0] - macdStart[0]) +
+          (signalStart[0] - signalEnd[0]) * (signalEnd[1] - macdStart[1])) /
+        det
+      // ((b - d) * (r - a) + (c - a) * (s - b)) / det
+      const gamma =
+        ((macdStart[1] - macdEnd[1]) * (signalEnd[0] - macdStart[0]) +
+          (macdEnd[0] - macdStart[0]) * (signalEnd[1] - macdStart[1])) /
+        det
+
+      if (0 < lambda && lambda < 1 && 0 < gamma && gamma < 1) {
+        macd.isIntersecting = true
+      }
+    }
+  }
 
   const emaBuys = emas.map((ema) => ema - ema * options.emaBuyRatio)
   const emaSells = emas.map((ema) => ema + ema * options.emaSellRatio)
