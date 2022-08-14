@@ -35,6 +35,7 @@
     "format:check": "prettier --check src/**/*.ts",
     "format": "prettier --write src/**/*.ts",
     "test": "vitest dev",
+    "test:ci": "vitest run",
     "publish": "cd dist && npm publish --access public"
   },
   "author": "Kaden Griffith <kaden.griffith@bytewave.co> (bytewave.co)",
