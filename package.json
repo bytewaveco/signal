@@ -22,10 +22,6 @@
     "url": "https://github.com/bytewaveco/signal/issues",
     "email": "kaden.griffith@bytewave.co"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
   "private": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
