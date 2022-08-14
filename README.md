@@ -1,5 +1,4 @@
-[![CodeQL](https://github.com/bytewaveco/signal/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/bytewaveco/signal/actions/workflows/codeql-analysis.yml) [![CI](https://github.com/bytewaveco/signal/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/bytewaveco/signal/actions/workflows/node.js.yml) [![Packages Released](https://github.com/bytewaveco/signal/actions/workflows/npm-publish-packages.yml/badge.svg?branch=main)](https://github.com/bytewaveco/signal/actions/workflows/npm-publish-packages.yml)
-
+[![CodeQL](https://github.com/bytewaveco/signal/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/bytewaveco/signal/actions/workflows/codeql-analysis.yml) [![CI](https://github.com/bytewaveco/signal/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/bytewaveco/signal/actions/workflows/node.js.yml) [![Packages Released](https://github.com/bytewaveco/signal/actions/workflows/npm-publish-packages.yml/badge.svg)](https://github.com/bytewaveco/signal/actions/workflows/npm-publish-packages.yml)
 # Signal
 
 Signal is a combination of MACD, EMA, and Williams %R. Signal offers a configurable set of financial indicators that can be used to determine whether a stock is overbought or oversold.
