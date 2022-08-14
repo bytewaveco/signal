@@ -9,7 +9,6 @@ export default defineConfig({
   plugins: [
     dts(),
     () => {
-      fs.copyFileSync('CHANGELOG.md', './dist/CHANGELOG.md')
       fs.copyFileSync('README.md', './dist/README.md')
     },
     () => {
