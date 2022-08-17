@@ -3,7 +3,7 @@ import { EMA, MACD, WilliamsR } from 'technicalindicators'
 /**
  * A generic financial candle. May contain non-controlled values.
  */
-interface SignalCandles extends Record<string, unknown> {
+export interface SignalCandles extends Record<string, unknown> {
   open: number
   close: number
   low: number
@@ -14,7 +14,7 @@ interface SignalCandles extends Record<string, unknown> {
 /**
  * Configuration options for Signal.
  */
-interface SignalOptions {
+export interface SignalOptions {
   openKey: string
   closeKey: string
   lowKey: string
@@ -32,7 +32,7 @@ interface SignalOptions {
 /**
  * Extended technicalindicators MACD output.
  */
-interface SignalMACDOutput {
+export interface SignalMACDOutput {
   MACD: number
   signal: number
   histogram: number
@@ -43,7 +43,7 @@ interface SignalMACDOutput {
 /**
  * An output signal.
  */
-interface SignalOutput {
+export interface SignalOutput {
   open: number
   close: number
   low: number
@@ -63,7 +63,7 @@ interface SignalOutput {
 /**
  * Default configuration options for Signal.
  */
-const SignalOptionsDefault: SignalOptions = {
+export const SignalOptionsDefault: SignalOptions = {
   openKey: 'open',
   closeKey: 'close',
   lowKey: 'low',
@@ -81,11 +81,12 @@ const SignalOptionsDefault: SignalOptions = {
 /**
  * Slice an array returning the last n elements.
  *
- * @param {any[]} arr The array to slice.
+ * @typedef {T} T The type of the array elements.
+ * @param {T[]} arr The array to slice.
  * @param {number} length The number of elements to keep.
- * @returns {any[]} The array with the last `length` elements.
+ * @returns {T[]} The array with the last `length` elements.
  */
-function sliceToLength(arr: any[], length: number): any[] {
+function sliceToLength<T>(arr: T[], length: number): T[] {
   return arr.slice(arr.length - length, arr.length)
 }
 
@@ -134,10 +135,13 @@ export function Signal(
 
   const minLength = Math.min(candles.length, emas.length, macds.length, williamsRs.length)
 
-  candles = sliceToLength(candles, minLength)
-  emas = sliceToLength(emas, minLength)
-  macds = sliceToLength(macds, minLength).map((macd, index) => ({ ...macd, index }))
-  williamsRs = sliceToLength(williamsRs, minLength)
+  candles = sliceToLength<Partial<SignalCandles>>(candles, minLength)
+  emas = sliceToLength<number>(emas, minLength)
+  macds = sliceToLength<SignalMACDOutput>(macds, minLength).map((macd, index) => ({
+    ...macd,
+    index,
+  }))
+  williamsRs = sliceToLength<number>(williamsRs, minLength)
 
   for (const macd of macds.slice(1)) {
     // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function

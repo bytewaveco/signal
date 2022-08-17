@@ -9,25 +9,26 @@ export default defineConfig({
   plugins: [
     dts(),
     () => {
-      if (fs.existsSync('dist')) {
-        fs.copyFileSync('README.md', 'dist/README.md')
+      if (!fs.existsSync('dist')) {
+        fs.mkdirSync('dist')
       }
     },
     () => {
-      if (fs.existsSync('dist')) {
-        const packageDeployable = {}
+      fs.copyFileSync('README.md', 'dist/README.md')
+    },
+    () => {
+      const packageDeployable = {}
 
-        for (const [key, value] of Object.entries(pkg)) {
-          if (!['dependencies', 'devDependencies', 'scripts'].includes(key)) {
-            packageDeployable[key] = value
-          }
+      for (const [key, value] of Object.entries(pkg)) {
+        if (!['dependencies', 'devDependencies', 'scripts'].includes(key)) {
+          packageDeployable[key] = value
         }
-
-        fs.writeFileSync(
-          './dist/package.json',
-          JSON.stringify(packageDeployable, undefined, 2)
-        )
       }
+
+      fs.writeFileSync(
+        './dist/package.json',
+        JSON.stringify(packageDeployable, undefined, 2)
+      )
     },
   ],
   build: {
