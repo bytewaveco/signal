@@ -14,8 +14,8 @@ npm install @bytwaveco/signal
 
 ### Usage
 
-```js
-import { Signal } from '@bytwave/signal'
+```typescript
+import { signal } from "@bytwave/signal";
 
 // Compatible with any financial source that provides candles
 const myFinData = [
@@ -24,7 +24,7 @@ const myFinData = [
     close: 105,
     low: 95,
     high: 110,
-    timestamp: '2022-01-01T12:00:00.000Z',
+    timestamp: "2022-01-01T12:00:00.000Z",
   },
 
   // ...
@@ -34,11 +34,11 @@ const myFinData = [
     close: 115,
     low: 101,
     high: 115,
-    timestamp: '2022-01-01T12:30:00.000Z',
+    timestamp: "2022-01-01T12:30:00.000Z",
   },
-]
+];
 
-const signals = Signal(myFinData)
+const signals = signal(myFinData);
 
 // Use calculated signals in your application
 ```
@@ -47,32 +47,32 @@ const signals = Signal(myFinData)
 
 Signal is configurable using the options argument as shown below:
 
-```js
+```typescript
 // ...
 
-const signals = Signal(myFinData, {
+const signals = signal(myFinData, {
   emaPeriod: 10,
-})
+});
 
 // ...
 ```
 
 Available options are:
 
-| Parameter | Description |
-| --- | --- |
-| `openKey` | The object key to treat as a candle open. Default `open`. |
-| `closeKey` | The object key to treat as a candle close. Default `close`. |
-| `lowKey` | The object key to treat as a candle low. Default `low`. |
-| `highKey` | The object key to treat as a candle high. Default `high`. |
+| Parameter             | Description                                                                 |
+| --------------------- | --------------------------------------------------------------------------- |
+| `openKey`             | The object key to treat as a candle open. Default `open`.                   |
+| `closeKey`            | The object key to treat as a candle close. Default `close`.                 |
+| `lowKey`              | The object key to treat as a candle low. Default `low`.                     |
+| `highKey`             | The object key to treat as a candle high. Default `high`.                   |
 | `timestampISO8601Key` | The object key to treat as a candle ISO8601 timestamp. Default `timestamp`. |
-| `emaPeriod` | Number of samples to take when generating EMA. Default `30`. |
-| `emaBuyRatio` | The EMA buy filter relative ratio. Default `0.005`. |
-| `emaSellRatio` | The EMA sell filter relative ratio. Default `0.005`. |
-| `macdFastPeriod` | Number of samples to take for the fast parameter in MACD. Default `5`. |
-| `macdSlowPeriod` | Number of samples to take for the slow parameter in MACD. Default `10`. |
-| `macdSignalPeriod` | Number of samples to take for the signal parameter in MACD. Default `7`. |
-| `williamsRPeriod` | Number of samples to take when generating Williams %R. Default `20`. |
+| `emaPeriod`           | Number of samples to take when generating EMA. Default `30`.                |
+| `emaBuyRatio`         | The EMA buy filter relative ratio. Default `0.005`.                         |
+| `emaSellRatio`        | The EMA sell filter relative ratio. Default `0.005`.                        |
+| `macdFastPeriod`      | Number of samples to take for the fast parameter in MACD. Default `5`.      |
+| `macdSlowPeriod`      | Number of samples to take for the slow parameter in MACD. Default `10`.     |
+| `macdSignalPeriod`    | Number of samples to take for the signal parameter in MACD. Default `7`.    |
+| `williamsRPeriod`     | Number of samples to take when generating Williams %R. Default `20`.        |
 
 ### Output
 
