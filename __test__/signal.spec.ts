@@ -1,12 +1,12 @@
 import { CandleGranularity, CoinbasePro } from 'coinbase-pro-node'
 import dayjs from 'dayjs'
-import { Signal, SignalCandles } from '../src'
+import { signal, SignalCandle } from '../src'
 
-let data: Partial<SignalCandles>[] = []
+let data: Partial<SignalCandle>[] = []
 
 describe('Signal', () => {
   it('sorts candles', async () => {
-    const signals = Signal([
+    const signals = signal([
       ...new Array(100).fill({
         open: 1,
         close: 2,
@@ -31,26 +31,26 @@ describe('Signal', () => {
     ])
 
     expect(signals.map(({ timestamp }) => timestamp)[signals.length - 1]).toBe(
-      '2022-08-17T00:00:00.000Z'
+      '2022-08-17T00:00:00.000Z',
     )
     expect(signals.map(({ timestamp }) => timestamp)[signals.length - 2]).toBe(
-      '2022-08-16T23:59:59.000Z'
+      '2022-08-16T23:59:59.000Z',
     )
   })
   describe('Coinbase Pro', async () => {
     beforeAll(async () => {
       const client = new CoinbasePro()
-      data = await client.rest.product.getCandles('ADA-USD', {
+      data = (await client.rest.product.getCandles('ADA-USD', {
         granularity: CandleGranularity.ONE_MINUTE,
         start: dayjs('2022-08-01T12:00:00Z')
           .subtract(12, 'h')
           .format('YYYY-MM-DDTHH:mm:ssZ'),
         end: dayjs('2022-08-01T12:00:00Z').format('YYYY-MM-DDTHH:mm:ssZ'),
-      })
+      })) as unknown as Partial<SignalCandle>[]
     })
 
     it('generates signals using Coinbase data', async () => {
-      const signals = Signal(data, {
+      const signals = signal(data, {
         timestampISO8601Key: 'openTimeInISO',
       })
       expect(signals).toBeDefined()
@@ -58,7 +58,7 @@ describe('Signal', () => {
     })
 
     it('creates expected number of intersections', async () => {
-      const intersections = Signal(data, {
+      const intersections = signal(data, {
         timestampISO8601Key: 'openTimeInISO',
       })
         .map((signal, index) => ({ ...signal, index }))

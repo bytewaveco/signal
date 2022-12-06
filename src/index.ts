@@ -3,7 +3,7 @@ import { EMA, MACD, WilliamsR } from 'technicalindicators'
 /**
  * A generic financial candle. May contain non-controlled values.
  */
-export interface SignalCandles extends Record<string, unknown> {
+export interface SignalCandle extends Record<string, unknown> {
   open: number
   close: number
   low: number
@@ -63,7 +63,7 @@ export interface SignalOutput {
 /**
  * Default configuration options for Signal.
  */
-export const SignalOptionsDefault: SignalOptions = {
+const defaultOptions: SignalOptions = {
   openKey: 'open',
   closeKey: 'close',
   lowKey: 'low',
@@ -81,10 +81,9 @@ export const SignalOptionsDefault: SignalOptions = {
 /**
  * Slice an array returning the last n elements.
  *
- * @typedef {T} T The type of the array elements.
- * @param {T[]} arr The array to slice.
- * @param {number} length The number of elements to keep.
- * @returns {T[]} The array with the last `length` elements.
+ * @param arr - The array to slice.
+ * @param length - The number of elements to keep.
+ * @returns The array with the last `length` elements.
  */
 function sliceToLength<T>(arr: T[], length: number): T[] {
   return arr.slice(arr.length - length, arr.length)
@@ -93,18 +92,16 @@ function sliceToLength<T>(arr: T[], length: number): T[] {
 /**
  * Calculate buy and sell signals for a given set of candles.
  *
- * @typedef {SignalCandles} SignalCandles
- * @typedef {SignalOutput} SignalOutput
- * @param {SignalCandles[]} candles The candles to calculate signals for.
- * @returns {SignalOutput[]} The signals for the given candles.
+ * @param candles - The candles to calculate signals for.
+ * @returns The signals for the given candles.
  */
-export function Signal(
-  candles: Partial<SignalCandles>[],
-  options: Partial<SignalOptions> = {}
+export function signal(
+  candles: Partial<SignalCandle>[],
+  options: Partial<SignalOptions> = {},
 ): SignalOutput[] {
-  options = { ...SignalOptionsDefault, ...options }
+  options = { ...defaultOptions, ...options }
   candles = candles
-    .map<SignalCandles>((candle) => ({
+    .map<SignalCandle>((candle) => ({
       open: parseFloat(String(candle[options.openKey])),
       close: parseFloat(String(candle[options.closeKey])),
       low: parseFloat(String(candle[options.lowKey])),
@@ -135,7 +132,7 @@ export function Signal(
 
   const minLength = Math.min(candles.length, emas.length, macds.length, williamsRs.length)
 
-  candles = sliceToLength<Partial<SignalCandles>>(candles, minLength)
+  candles = sliceToLength<Partial<SignalCandle>>(candles, minLength)
   emas = sliceToLength<number>(emas, minLength)
   macds = sliceToLength<SignalMACDOutput>(macds, minLength).map((macd, index) => ({
     ...macd,
@@ -144,6 +141,7 @@ export function Signal(
   williamsRs = sliceToLength<number>(williamsRs, minLength)
 
   for (const macd of macds.slice(1)) {
+    /* eslint-disable-next-line max-len */
     // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
     // [a, b]
     const macdStart = [macd.index - 1, macds[macd.index - 1].MACD]
@@ -170,7 +168,7 @@ export function Signal(
           (macdEnd[0] - macdStart[0]) * (signalEnd[1] - macdStart[1])) /
         det
 
-      if (0 < lambda && lambda < 1 && 0 < gamma && gamma < 1) {
+      if (lambda > 0 && lambda < 1 && gamma > 0 && gamma < 1) {
         macd.isIntersecting = true
       }
     }

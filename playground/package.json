@@ -1,0 +1,6 @@
+{
+  "name": "playground",
+  "dependencies": {
+    "@bytewave/signal": "file:.."
+  }
+}
