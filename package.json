@@ -27,6 +27,7 @@
     "clean": "rimraf dist",
     "playground": "unbuild --stub && nodemon \"playground/server.ts\"",
     "lint": "eslint --fix \"**/*\"",
+    "lint:ci": "eslint \"**/*\"",
     "test": "vitest --coverage",
     "test:ci": "vitest run --coverage"
   },
